@@ -1,0 +1,109 @@
+openapi: 3.0.0
+info:
+  title: BeerShop API
+  version: "1.0.0"
+  description: |
+    Простая демонстрация OpenAPI схемы для сервиса продажи пива.
+
+servers:
+  - url: https://api.beershop.com/v1
+
+paths:
+  /beers:
+    get:
+      summary: Получить список доступных сортов пива
+      description: Возвращает массив доступных сортов пива.
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beer'
+
+  /beers/{beerId}:
+    get:
+      summary: Получить информацию о конкретном сорте пива
+      parameters:
+        - name: beerId
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - ipa-123  # IPA Classic
+              - lager-456  # Lager Gold
+              - stout-789  # Stout Dark
+              - pilsner-321  # Pilsner Light
+          description: Уникальный идентификатор сорта пива
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
+        '404':
+          description: Пиво не найдено
+
+  /orders:
+    post:
+      summary: Оформить заказ на покупку пива
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Заказ успешно оформлен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderConfirmation'
+
+components:
+  schemas:
+    Beer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "ipa-123"
+        name:
+          type: string
+          example: "IPA Classic"
+        abv:
+          type: number
+          format: float
+          example: 5.5
+        price:
+          type: number
+          format: float
+          example: 3.99
+
+    Order:
+      type: object
+      properties:
+        beerId:
+          type: string
+          example: "ipa-123"
+        quantity:
+          type: integer
+          example: 2
+        customerName:
+          type: string
+          example: "Иван Иванов"
+
+    OrderConfirmation:
+      type: object
+      properties:
+        orderId:
+          type: string
+          example: "order-456"
+        status:
+          type: string
+          example: "Заказ успешно оформлен"
