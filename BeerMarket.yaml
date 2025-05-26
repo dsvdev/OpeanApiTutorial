@@ -8,9 +8,17 @@ info:
 servers:
   - url: https://api.beershop.com/v1
 
+tags:
+  - name: beer
+    description: All about beer
+  - name: order
+    description: All about orders
+
 paths:
   /beers:
     get:
+      tags:
+        - beer
       summary: Получить список доступных сортов пива
       description: Возвращает массив доступных сортов пива.
       responses:
@@ -25,6 +33,8 @@ paths:
 
   /beers/{beerId}:
     get:
+      tags:
+        - beer
       summary: Получить информацию о конкретном сорте пива
       parameters:
         - name: beerId
@@ -50,6 +60,8 @@ paths:
 
   /orders:
     post:
+      tags:
+        - order
       summary: Оформить заказ на покупку пива
       requestBody:
         required: true
